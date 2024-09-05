@@ -4,7 +4,7 @@ from aiogram.utils import executor
 import os
 from buttons import start, start_test
 from config import bot, dp, admin
-from handlers import commands, echo
+from handlers import commands, echo, quiz
 
 
 
@@ -14,6 +14,9 @@ async def on_startup(_):
                     reply_markup=start_test)
 
 commands.register_commands(dp)
+
+quiz.register_quiz(dp)
+
 echo.register_echo(dp)
 
 
