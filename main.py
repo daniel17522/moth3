@@ -1,33 +1,26 @@
 import logging
-from aiogram import types
 from aiogram.utils import executor
-import os
-from buttons import start, start_test
+from buttons import start_test
 from config import bot, dp, admin
-from handlers import commands, echo, quiz, FSM_registration
-
-
+from handlers import commands, echo, quiz, FSM_registration, fsm_store, webapp, admin_group
+from db import db_main
 
 async def on_startup(_):
     for i in admin:
         await bot.send_message(chat_id=i, text="Бот включен!",
-                    reply_markup=start_test)
+                               reply_markup=start_test)
+        await db_main.sql_create()
+
 
 commands.register_commands(dp)
-
 quiz.register_quiz(dp)
-
-FSM_registration.register_FSM(dp)
-
-echo.register_echo(dp)
-
-
+FSM_registration.register_fsm_reg(dp)
+fsm_store.register_store(dp)
+webapp.register_handler_webapp(dp)
+admin_group.register_admin_group(dp)
+#echo.register_echo(dp)
 
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
     executor.start_polling(dp, skip_updates=True, on_startup=on_startup)
-
-
-
-
